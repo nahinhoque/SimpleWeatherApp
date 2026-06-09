@@ -9,43 +9,47 @@ const resultDesc = document.getElementById("resultDesc");
 const resultWind = document.getElementById("resultWind");
 
 const DEFAULT_COUNTRY = "BD";
-const DEFAULT_CITY = "Dhaka"
+const DEFAULT_CITY = "Dhaka";
+
+// live backend API base URL
+const API_BASE_URL = "https://simple-weather-backend.vercel.app";
 
 async function loadCountries() {
     message.textContent = "Loading countries...";
 
     try {
-        const response = await fetch("http://localhost:3000/api/countries");
+        // Updated to use live Vercel backend
+        const response = await fetch(`${API_BASE_URL}/api/countries`);
         const countries = await response.json();
 
-        countrySelect.innerHTML = "<option value =''>Select a country</option>"
+        countrySelect.innerHTML = "<option value =''>Select a country</option>";
 
         countries.forEach(country => {
             const option = document.createElement("option");
             option.value = country.code;
             option.textContent = country.name;
-            countrySelect.appendChild(option)
-        })
+            countrySelect.appendChild(option);
+        });
 
         countrySelect.value = DEFAULT_COUNTRY;
         await loadCities(DEFAULT_COUNTRY, DEFAULT_CITY);
         message.textContent = "";
     } catch (error) {
         message.textContent = error.message || "Error loading countries";
-
     }
 }
 
 async function loadCities(countryCode, preferredCity) {
     citySelect.disabled = true;
-    citySelect.innerHTML = "<option value =''>Loading cities...</option>"
-    message.innerText = "Loading cities..."
+    citySelect.innerHTML = "<option value =''>Loading cities...</option>";
+    message.innerText = "Loading cities...";
 
     try {
-        const response = await fetch(`http://localhost:3000/api/cities?countryCode=${countryCode}`);
+        // Updated to use live Vercel backend
+        const response = await fetch(`${API_BASE_URL}/api/cities?countryCode=${countryCode}`);
         const cities = await response.json();
 
-        citySelect.innerHTML = "<option value =''>Select a city</option>"
+        citySelect.innerHTML = "<option value =''>Select a city</option>";
 
         cities.forEach(city => {
             const option = document.createElement("option");
@@ -53,8 +57,8 @@ async function loadCities(countryCode, preferredCity) {
             option.textContent = city.name;
             option.dataset.lat = city.lat;
             option.dataset.lon = city.lon;
-            citySelect.appendChild(option)
-        })
+            citySelect.appendChild(option);
+        });
 
         if (preferredCity) {
             const match = Array.from(citySelect.options).find(
@@ -75,22 +79,18 @@ async function loadCities(countryCode, preferredCity) {
         citySelect.disabled = false;
         message.textContent = "";
     }
-
 }
 
-
-loadCountries()
-
+loadCountries();
 
 countrySelect.addEventListener("change", async (event) => {
     const countryCode = event.target.value;
     if (!countryCode) {
-        citySelect.innerHTML = "<option value =''>Select a country first</option>"
+        citySelect.innerHTML = "<option value =''>Select a country first</option>";
         return;
     }
     await loadCities(countryCode);
-})
-
+});
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -106,14 +106,14 @@ form.addEventListener("submit", async (event) => {
     message.textContent = "Loading....";
     result.classList.add("hidden");
 
-
     try {
         const selectedOption = citySelect.options[citySelect.selectedIndex];
         const lat = selectedOption.dataset.lat;
         const lng = selectedOption.dataset.lon;
         const country = countrySelect.value;
 
-        const response = await fetch(`http://localhost:3000/api/weather?city=${city}&country=${country}&lat=${lat}&lon=${lng}`);
+        // Updated to use live Vercel backend
+        const response = await fetch(`${API_BASE_URL}/api/weather?city=${city}&country=${country}&lat=${lat}&lon=${lng}`);
         const data = await response.json();
 
         if (!response.ok) {
@@ -130,7 +130,5 @@ form.addEventListener("submit", async (event) => {
         result.classList.remove("hidden");
     } catch (error) {
         message.textContent = error.message || "Error fetching weather data";
-
     }
-
-})
+});
