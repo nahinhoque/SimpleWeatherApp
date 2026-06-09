@@ -23,5 +23,4 @@ if (process.env.NODE_ENV !== 'production') {
     });
 }
 
-// CRUCIAL FOR VERCEL
 export default app;
