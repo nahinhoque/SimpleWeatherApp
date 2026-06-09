@@ -16,3 +16,14 @@ app.use("/api", weatherRoutes);
 app.listen(PORT, () => {
     console.log(`Server is running on por ${PORT}`);
 });
+
+
+// ONLY start the local server if we aren't running on Vercel
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+
+// CRUCIAL FOR VERCEL: Export the app instance
+export default app;
