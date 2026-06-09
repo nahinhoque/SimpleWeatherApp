@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
-import countryRoutes from "../backend/routes/countryRoutes.js";
-import cityRoutes from "../backend/routes/cityRoutes.js";
-import weatherRoutes from "../backend/routes/weatherRoutes.js";
+import countryRoutes from "./routes/countryRoutes.js";
+import cityRoutes from "./routes/cityRoutes.js";
+import weatherRoutes from "./routes/weatherRoutes.js";
 
 const app = express();
 const PORT = 3000;
